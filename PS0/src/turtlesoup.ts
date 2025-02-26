@@ -57,8 +57,7 @@ export function drawApproximateCircle(
  * @returns The distance between p1 and p2.
  */
 export function distance(p1: Point, p2: Point): number {
-  // TODO: Implement distance
-  return 0; // Placeholder
+  return Math.sqrt((p1.x - p2.x) ** 2 + (p1.y - p2.y) ** 2);
 }
 
 /**
@@ -165,12 +164,12 @@ export function main(): void {
   // console.log("Chord length for radius 5, angle 60 degrees:", chordLength(5, 60));
 
   // Draw an approximate circle
-  drawApproximateCircle(turtle, 50, 360);
+  // drawApproximateCircle(turtle, 50, 360);
 
   // Example distance calculation (for testing in console)
-  // const p1: Point = {x: 1, y: 2};
-  // const p2: Point = {x: 4, y: 6};
-  // console.log("Distance between p1 and p2:", distance(p1, p2));
+  const p1: Point = { x: 1, y: 2 };
+  const p2: Point = { x: 4, y: 6 };
+  console.log("Distance between p1 and p2:", distance(p1, p2));
 
   // Example findPath (conceptual - prints path to console)
   // const pointsToVisit: Point[] = [{x: 20, y: 20}, {x: 80, y: 20}, {x: 80, y: 80}];
