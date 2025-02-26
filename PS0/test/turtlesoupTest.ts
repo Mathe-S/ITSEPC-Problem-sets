@@ -70,7 +70,7 @@ describe("drawApproximateCircle", () => {
 });
 
 describe("findPath", () => {
-  it("example path finding (conceptual check)", () => {
+  it("example path finding", () => {
     const turtle = new SimpleTurtle();
     const points: Point[] = [
       { x: 10, y: 10 },
@@ -81,6 +81,9 @@ describe("findPath", () => {
     // Since findPath is conceptual in PS0, you might just check if it returns *something*
     expect(pathInstructions).to.be.an("array");
     // More detailed tests would involve analyzing the *content* of pathInstructions if you define a specific output format.
+    expect(pathInstructions[0]).to.equal("forward 14.142135623730951 turn 45");
+    expect(pathInstructions[1]).to.equal("forward 30 turn 0");
+    expect(pathInstructions[2]).to.equal("forward 30 turn 90");
   });
 });
 

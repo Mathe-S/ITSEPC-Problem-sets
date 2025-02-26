@@ -70,8 +70,21 @@ export function distance(p1: Point, p2: Point): number {
  *          The function primarily needs to *calculate* the path conceptually.
  */
 export function findPath(turtle: Turtle, points: Point[]): string[] {
-  // TODO: Implement findPath (conceptually, you don't need to *execute* the path here)
-  return []; // Placeholder
+  const ans = [];
+  let startPoint = { x: 0, y: 0, angle: 0 };
+  for (const point of points) {
+    const forward = distance(startPoint, point);
+    const turnInDegree =
+      Math.atan((point.y - startPoint.y) / (point.x - startPoint.x)) *
+      (180 / Math.PI);
+    turtle.turn(turnInDegree);
+    turtle.forward(forward);
+
+    startPoint = { ...point, angle: turtle.getHeading() };
+
+    ans.push(`forward ${forward} turn ${turnInDegree}`);
+  }
+  return ans;
 }
 
 /**
@@ -167,14 +180,18 @@ export function main(): void {
   // drawApproximateCircle(turtle, 50, 360);
 
   // Example distance calculation (for testing in console)
-  const p1: Point = { x: 1, y: 2 };
-  const p2: Point = { x: 4, y: 6 };
-  console.log("Distance between p1 and p2:", distance(p1, p2));
+  // const p1: Point = { x: 1, y: 2 };
+  // const p2: Point = { x: 4, y: 6 };
+  // console.log("Distance between p1 and p2:", distance(p1, p2));
 
   // Example findPath (conceptual - prints path to console)
-  // const pointsToVisit: Point[] = [{x: 20, y: 20}, {x: 80, y: 20}, {x: 80, y: 80}];
-  // const pathInstructions = findPath(turtle, pointsToVisit);
-  // console.log("Path instructions:", pathInstructions);
+  const pointsToVisit: Point[] = [
+    { x: 20, y: 20 },
+    { x: 80, y: 20 },
+    { x: 80, y: 80 },
+  ];
+  const pathInstructions = findPath(turtle, pointsToVisit);
+  console.log("Path instructions:", pathInstructions);
 
   // Draw personal art
   // drawPersonalArt(turtle);
