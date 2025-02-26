@@ -2,7 +2,7 @@
 
 TODO:
 
-[] Start with drawSquare. Make it draw a correct square. Run npm start to see the output in output.html.
+[X] Start with drawSquare. Make it draw a correct square. Run npm start to see the output in output.html.
 [] Implement chordLength. Run npm test and make sure the chordLength tests pass (turn green).
 [] Implement drawApproximateCircle using chordLength. Run npm start and visually check output.html.
 [] Implement distance. Run npm test and make sure the distance tests pass.
