@@ -42,6 +42,22 @@ describe("toBucketSets()", () => {
     expect(result[0]?.has(card0)).to.be.true;
     expect(result[1]?.has(card1)).to.be.true;
   });
+
+  it("should handle gaps in bucket numbers", () => {
+    const buckets = new Map<number, Set<Flashcard>>();
+    const card0 = createCard("card0");
+    const card2 = createCard("card2");
+
+    buckets.set(0, new Set([card0]));
+    buckets.set(2, new Set([card2]));
+
+    const result = toBucketSets(buckets);
+
+    expect(result.length).to.equal(3);
+    expect(result[0]?.has(card0)).to.be.true;
+    expect(result[1]?.size).to.equal(0);
+    expect(result[2]?.has(card2)).to.be.true;
+  });
 });
 
 /*
