@@ -29,3 +29,5 @@ Start with algorithm.ts and test/algorithmTest.ts:
 - Run Tests Frequently: Use npm test in the terminal to run your tests and see your progress.
 
 - Commit and Push Regularly: Use git add, git commit, and git push to save your work frequently to Git.
+
+![alt text](https://fms-s3-dev.s3.eu-central-1.amazonaws.com/flashcards.png)
