@@ -5,7 +5,7 @@
  * as described in the problem set handout.
  *
  * Please DO NOT modify the signatures of the exported functions in this file,
- * or you risk failing the Didit autograder.
+ * or you risk failing the autograder.
  */
 
 import { Flashcard, AnswerDifficulty, BucketMap } from "./flashcards";
