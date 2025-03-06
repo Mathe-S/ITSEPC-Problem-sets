@@ -10,10 +10,38 @@ import {
 } from "../src/algorithm";
 import { expect } from "chai";
 
-/*
- * Testing strategy for toBucketSets():
+/**
+ * Testing Strategy for toBucketSets()
  *
- * TODO: Describe your testing strategy for toBucketSets() here.
+ * Partition the input space by:
+ * - Size of input map:
+ *   × empty map
+ *   × single bucket
+ *   × multiple buckets
+ *
+ * - Bucket numbers:
+ *   × sequential (0,1,2...)
+ *   × with gaps (0,2,4...)
+ *   × non-sequential ordering in map (2,0,1)
+ *
+ * - Contents of buckets:
+ *   × empty sets
+ *   × single card
+ *   × multiple cards
+ *
+ * - Range of bucket numbers:
+ *   × starting at 0
+ *   × starting at higher number
+ *   × sparse distribution
+ *
+ * Cover each part of each partition at least once.
+ * Also test combinations of different characteristics:
+ * - Multiple buckets with varied contents
+ * - Non-sequential buckets with gaps
+ * - High bucket numbers with empty intervening buckets
+ *
+ * We use a helper function createCard() to generate test flashcards
+ * to avoid repetitive constructor calls and improve test readability.
  */
 describe("toBucketSets()", () => {
   // Helper function to create test flashcards
