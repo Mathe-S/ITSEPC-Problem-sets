@@ -33,11 +33,36 @@ app.get("/attendance", (req: Request, res: Response) => {
     const today = new Date().toISOString().split("T")[0];
     const attendanceFile = path.join(ATTENDANCE_DIR, `attendance_${today}.txt`);
 
-    // Create attendance record
+    // Check if file exists and read it
+    let existingAttendance: string[] = [];
+    if (fs.existsSync(attendanceFile)) {
+      existingAttendance = fs
+        .readFileSync(attendanceFile, "utf8")
+        .split("\n")
+        .filter((line) => line.trim() !== "");
+    }
+
+    // Check if student already marked attendance today
+    const studentFound = existingAttendance.some((record) => {
+      const [, studentInfo] = record.split(" - ");
+      return studentInfo?.toLowerCase() === `${name} ${surname}`.toLowerCase();
+    });
+
+    if (studentFound) {
+      res.status(400).json({
+        error: "Attendance already taken for today",
+        student: {
+          name: name,
+          surname: surname,
+        },
+        date: today,
+      });
+      return;
+    }
+
+    // If not found, add new attendance record
     const timestamp = new Date().toISOString();
     const attendanceRecord = `${timestamp} - ${name} ${surname}\n`;
-
-    // Append to file (creates file if it doesn't exist)
     fs.appendFileSync(attendanceFile, attendanceRecord);
 
     res.json({
@@ -54,6 +79,34 @@ app.get("/attendance", (req: Request, res: Response) => {
     console.error("Error recording attendance:", error);
     res.status(500).json({
       error: "Failed to record attendance",
+    });
+    return;
+  }
+});
+
+// View attendance for a specific date
+app.get("/view-attendance/:date", (req: Request, res: Response) => {
+  const { date } = req.params;
+  const attendanceFile = path.join(ATTENDANCE_DIR, `attendance_${date}.txt`);
+
+  try {
+    if (!fs.existsSync(attendanceFile)) {
+      res.status(404).json({
+        error: "No attendance records found for this date",
+      });
+      return;
+    }
+
+    const attendance = fs.readFileSync(attendanceFile, "utf8");
+    res.json({
+      date: date,
+      attendance: attendance.split("\n").filter((line) => line.trim() !== ""),
+    });
+    return;
+  } catch (error) {
+    console.error("Error reading attendance:", error);
+    res.status(500).json({
+      error: "Failed to read attendance records",
     });
     return;
   }
