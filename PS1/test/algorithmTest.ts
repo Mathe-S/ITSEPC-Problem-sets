@@ -125,7 +125,27 @@ describe("toBucketSets()", () => {
 /*
  * Testing strategy for getBucketRange():
  *
- * TODO: Describe your testing strategy for getBucketRange() here.
+ * Partition the input space by:
+ * - Array size:
+ *   × empty array
+ *   × single bucket
+ *   × multiple buckets
+ *
+ * - Distribution of cards:
+ *   × no cards in any bucket (all empty sets)
+ *   × cards in consecutive buckets
+ *   × cards with gaps between buckets
+ *   × cards only in first bucket
+ *   × cards only in last bucket
+ *   × cards in first and last bucket only
+ *
+ * - Bucket indices:
+ *   × starting at index 0
+ *   × range spanning multiple indices
+ *   × large bucket indices
+ *
+ * Cover each part of each partition at least once.
+ * Also test combinations of different characteristics.
  */
 describe("getBucketRange()", () => {
   it("Example test case - replace with your own tests", () => {
