@@ -101,6 +101,25 @@ describe("toBucketSets()", () => {
     expect(result[0]?.has(card1)).to.be.true;
     expect(result[0]?.has(card2)).to.be.true;
   });
+
+  it("should handle non-sequential bucket numbers", () => {
+    const buckets = new Map<number, Set<Flashcard>>();
+    const card3 = createCard("card3");
+    const card5 = createCard("card5");
+
+    buckets.set(3, new Set([card3]));
+    buckets.set(5, new Set([card5]));
+
+    const result = toBucketSets(buckets);
+
+    expect(result.length).to.equal(6);
+    expect(result[0]?.size).to.equal(0);
+    expect(result[1]?.size).to.equal(0);
+    expect(result[2]?.size).to.equal(0);
+    expect(result[3]?.has(card3)).to.be.true;
+    expect(result[4]?.size).to.equal(0);
+    expect(result[5]?.has(card5)).to.be.true;
+  });
 });
 
 /*
