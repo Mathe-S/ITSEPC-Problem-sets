@@ -148,6 +148,12 @@ describe("getBucketRange()", () => {
     const result = getBucketRange([]);
     expect(result).to.be.undefined;
   });
+
+  it("should return undefined when all buckets are empty", () => {
+    const buckets: Array<Set<Flashcard>> = [new Set(), new Set(), new Set()];
+    const result = getBucketRange(buckets);
+    expect(result).to.be.undefined;
+  });
 });
 
 /*
