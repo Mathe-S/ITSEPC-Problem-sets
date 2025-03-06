@@ -58,6 +58,21 @@ describe("toBucketSets()", () => {
     expect(result[1]?.size).to.equal(0);
     expect(result[2]?.has(card2)).to.be.true;
   });
+
+  it("should handle multiple cards in same bucket", () => {
+    const buckets = new Map<number, Set<Flashcard>>();
+    const card1 = createCard("card1");
+    const card2 = createCard("card2");
+
+    buckets.set(0, new Set([card1, card2]));
+
+    const result = toBucketSets(buckets);
+
+    expect(result.length).to.equal(1);
+    expect(result[0]?.size).to.equal(2);
+    expect(result[0]?.has(card1)).to.be.true;
+    expect(result[0]?.has(card2)).to.be.true;
+  });
 });
 
 /*
