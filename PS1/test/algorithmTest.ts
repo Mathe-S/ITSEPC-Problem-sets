@@ -160,6 +160,16 @@ describe("getBucketRange()", () => {
     const result = getBucketRange(buckets);
     expect(result).to.deep.equal({ minBucket: 0, maxBucket: 0 });
   });
+
+  it("should handle consecutive buckets with cards", () => {
+    const buckets = [
+      new Set([createCard("card1")]),
+      new Set([createCard("card2")]),
+      new Set([createCard("card3")]),
+    ];
+    const result = getBucketRange(buckets);
+    expect(result).to.deep.equal({ minBucket: 0, maxBucket: 2 });
+  });
 });
 
 /*
