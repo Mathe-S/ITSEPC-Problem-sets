@@ -16,11 +16,31 @@ import { expect } from "chai";
  * TODO: Describe your testing strategy for toBucketSets() here.
  */
 describe("toBucketSets()", () => {
+  // Helper function to create test flashcards
+  const createCard = (front: string): Flashcard => {
+    return new Flashcard(front, "back", "hint", []);
+  };
+
   it("should handle empty buckets map", () => {
     const emptyMap = new Map<number, Set<Flashcard>>();
     const result = toBucketSets(emptyMap);
     expect(result).to.be.an("array");
     expect(result.length).to.equal(0);
+  });
+
+  it("should convert simple sequential buckets", () => {
+    const buckets = new Map<number, Set<Flashcard>>();
+    const card0 = createCard("card0");
+    const card1 = createCard("card1");
+
+    buckets.set(0, new Set([card0]));
+    buckets.set(1, new Set([card1]));
+
+    const result = toBucketSets(buckets);
+
+    expect(result.length).to.equal(2);
+    expect(result[0]?.has(card0)).to.be.true;
+    expect(result[1]?.has(card1)).to.be.true;
   });
 });
 
