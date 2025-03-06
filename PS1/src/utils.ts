@@ -2,6 +2,8 @@
 // for both implementation and testing code.
 // Place any reusable helper functions here.
 
+import { Flashcard } from "./flashcards";
+
 // Example utility function (you can remove this):
 /**
  * Adds two numbers together.
@@ -12,3 +14,12 @@
 export function add(a: number, b: number): number {
   return a + b;
 }
+
+/**
+ *  Helper function to create test flashcards
+ * @param front
+ * @returns Flashcard
+ */
+export const createCard = (front: string): Flashcard => {
+  return new Flashcard(front, "back", "hint", []);
+};

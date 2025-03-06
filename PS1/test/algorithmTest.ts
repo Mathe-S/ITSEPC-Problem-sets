@@ -9,6 +9,7 @@ import {
   computeProgress,
 } from "../src/algorithm";
 import { expect } from "chai";
+import { createCard } from "../src/utils";
 
 /**
  * Testing Strategy for toBucketSets()
@@ -44,11 +45,6 @@ import { expect } from "chai";
  * to avoid repetitive constructor calls and improve test readability.
  */
 describe("toBucketSets()", () => {
-  // Helper function to create test flashcards
-  const createCard = (front: string): Flashcard => {
-    return new Flashcard(front, "back", "hint", []);
-  };
-
   it("should handle empty buckets map", () => {
     const emptyMap = new Map<number, Set<Flashcard>>();
     const result = toBucketSets(emptyMap);
@@ -148,10 +144,9 @@ describe("toBucketSets()", () => {
  * Also test combinations of different characteristics.
  */
 describe("getBucketRange()", () => {
-  it("Example test case - replace with your own tests", () => {
-    assert.fail(
-      "Replace this test case with your own tests based on your testing strategy"
-    );
+  it("should return undefined for empty array", () => {
+    const result = getBucketRange([]);
+    expect(result).to.be.undefined;
   });
 });
 
