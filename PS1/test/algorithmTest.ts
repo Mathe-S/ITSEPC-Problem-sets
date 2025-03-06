@@ -192,6 +192,16 @@ describe("getBucketRange()", () => {
     const result = getBucketRange(buckets);
     expect(result).to.deep.equal({ minBucket: 0, maxBucket: 0 });
   });
+
+  it("should handle cards only in last bucket", () => {
+    const buckets: Array<Set<Flashcard>> = [
+      new Set(),
+      new Set(),
+      new Set([createCard("card3")]),
+    ];
+    const result = getBucketRange(buckets);
+    expect(result).to.deep.equal({ minBucket: 2, maxBucket: 2 });
+  });
 });
 
 /*
