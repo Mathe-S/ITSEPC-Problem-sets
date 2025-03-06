@@ -1,5 +1,6 @@
 import express, { Express, Request, Response } from "express";
 import path from "path";
+import fs from "fs";
 
 const app: Express = express();
 const port = 8000;
@@ -12,25 +13,50 @@ app.get("/output", (req: Request, res: Response) => {
   res.sendFile(path.join(__dirname, "../../PS0/output.html"));
 });
 
+const ATTENDANCE_DIR = path.join(__dirname, "../../attendance");
+if (!fs.existsSync(ATTENDANCE_DIR)) {
+  fs.mkdirSync(ATTENDANCE_DIR, { recursive: true });
+}
+
 app.get("/attendance", (req: Request, res: Response) => {
   const { name, surname } = req.query;
 
   if (!name || !surname) {
-    return res.status(400).json({
+    res.status(400).json({
       error: "Name and surname are required",
     });
+    return;
   }
 
-  // Here we will typically save this to a database
-  // For now, we'll just send back a confirmation
-  return res.json({
-    message: "Attendance recorded",
-    student: {
-      name: name,
-      surname: surname,
-    },
-    timestamp: new Date(),
-  });
+  try {
+    // Get current date in YYYY-MM-DD format
+    const today = new Date().toISOString().split("T")[0];
+    const attendanceFile = path.join(ATTENDANCE_DIR, `attendance_${today}.txt`);
+
+    // Create attendance record
+    const timestamp = new Date().toISOString();
+    const attendanceRecord = `${timestamp} - ${name} ${surname}\n`;
+
+    // Append to file (creates file if it doesn't exist)
+    fs.appendFileSync(attendanceFile, attendanceRecord);
+
+    res.json({
+      message: "Attendance recorded",
+      student: {
+        name: name,
+        surname: surname,
+      },
+      timestamp: timestamp,
+      file: `attendance_${today}.txt`,
+    });
+    return;
+  } catch (error) {
+    console.error("Error recording attendance:", error);
+    res.status(500).json({
+      error: "Failed to record attendance",
+    });
+    return;
+  }
 });
 
 app.listen(port, () => {
