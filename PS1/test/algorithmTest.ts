@@ -212,6 +212,14 @@ describe("getBucketRange()", () => {
     const result = getBucketRange(buckets);
     expect(result).to.deep.equal({ minBucket: 0, maxBucket: 2 });
   });
+
+  it("should handle large bucket indices", () => {
+    const buckets = Array(10).fill(new Set());
+    buckets[3] = new Set([createCard("card3")]);
+    buckets[8] = new Set([createCard("card8")]);
+    const result = getBucketRange(buckets);
+    expect(result).to.deep.equal({ minBucket: 3, maxBucket: 8 });
+  });
 });
 
 /*
