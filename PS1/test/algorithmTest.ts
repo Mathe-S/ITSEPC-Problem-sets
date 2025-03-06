@@ -154,6 +154,12 @@ describe("getBucketRange()", () => {
     const result = getBucketRange(buckets);
     expect(result).to.be.undefined;
   });
+
+  it("should handle single bucket with cards", () => {
+    const buckets = [new Set([createCard("card1")])];
+    const result = getBucketRange(buckets);
+    expect(result).to.deep.equal({ minBucket: 0, maxBucket: 0 });
+  });
 });
 
 /*
