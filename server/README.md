@@ -5,7 +5,6 @@
 Create a new folder and move into the directory:
 
 ```bat
-mkdir server
 cd server
 ```
 
