@@ -9,7 +9,7 @@ app.get("/", (req, res) => {
   res.send("Hello, World!");
 });
 
-app.get("/output", (req, res) => {
+app.get("/turle", (req, res) => {
   res.sendFile(path.join(__dirname, "../../PS0/output.html"));
 });
 
