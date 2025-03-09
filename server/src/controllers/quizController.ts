@@ -37,13 +37,16 @@ export class QuizController {
 
   getActiveQuiz = async (req: Request, res: Response) => {
     try {
-      const activeQuiz = await this.quizService.getActiveQuiz();
-      if (!activeQuiz) {
-        return res.status(404).json({ message: "No active quiz found" });
+      const activeQuizzes = await this.quizService.getActiveQuiz();
+      if (activeQuizzes.length === 0) {
+        return res.status(404).json({ message: "No active quizzes found" });
       }
-      return res.json(activeQuiz);
+      return res.json({
+        message: "Active quizzes retrieved successfully",
+        quizzes: activeQuizzes,
+      });
     } catch (error) {
-      return res.status(500).json({ error: "Failed to fetch active quiz" });
+      return res.status(500).json({ error: "Failed to fetch active quizzes" });
     }
   };
 

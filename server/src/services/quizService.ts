@@ -40,23 +40,26 @@ export class QuizService {
     return await this.quizModel.save(quiz);
   }
 
-  async getActiveQuiz(): Promise<Quiz | null> {
+  async getActiveQuiz(): Promise<Quiz[]> {
+    // Changed return type to array
     try {
       // Get all files from quiz directory
       const files = await fs.promises.readdir(this.quizModel.QUIZ_DIR);
+      const activeQuizzes: Quiz[] = [];
 
-      // Find the first active quiz
+      // Find all active quizzes
       for (const file of files) {
         const quiz = await this.quizModel.findById(file.replace(".json", ""));
         if (quiz && quiz.status === "active") {
-          // Remove correctAnswer when sending to students
+          // Remove correctAnswers when sending to students
           const { correctAnswers, ...quizWithoutAnswer } = quiz;
-          return quizWithoutAnswer as Quiz;
+          activeQuizzes.push(quizWithoutAnswer as Quiz);
         }
       }
-      return null;
+
+      return activeQuizzes; // Return array of active quizzes
     } catch (error) {
-      throw new Error("Failed to fetch active quiz");
+      throw new Error("Failed to fetch active quizzes");
     }
   }
 
