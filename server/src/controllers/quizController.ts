@@ -37,14 +37,14 @@ export class QuizController {
 
   getActiveQuiz = async (req: Request, res: Response) => {
     try {
-      const activeQuizzes = await this.quizService.getActiveQuiz();
-      if (activeQuizzes.length === 0) {
+      const quizHTML = await this.quizService.getActiveQuiz();
+      if (!quizHTML) {
         return res.status(404).json({ message: "No active quizzes found" });
       }
-      return res.json({
-        message: "Active quizzes retrieved successfully",
-        quizzes: activeQuizzes,
-      });
+
+      // Set content type to HTML
+      res.setHeader("Content-Type", "text/html");
+      return res.send(quizHTML);
     } catch (error) {
       return res.status(500).json({ error: "Failed to fetch active quizzes" });
     }
@@ -52,15 +52,17 @@ export class QuizController {
 
   submitAnswer = async (req: Request, res: Response) => {
     try {
-      const { quizId, studentId, answer } = req.body;
+      const { quizId, studentId, answers } = req.body;
       const result = await this.quizService.submitAnswer(
         quizId,
         studentId,
-        answer
+        answers
       );
       res.json(result);
     } catch (error) {
-      res.status(500).json({ error: "Failed to submit answer" });
+      if (error instanceof Error) {
+        res.status(500).json({ error: error?.message });
+      }
     }
   };
 
@@ -68,8 +70,11 @@ export class QuizController {
     try {
       const { quizId } = req.params;
       if (!quizId) throw new Error("Quiz ID is required");
-      const results = await this.quizService.getQuizResults(quizId);
-      res.json(results);
+      const resultsHTML = await this.quizService.getQuizResults(quizId);
+
+      // Set content type to HTML
+      res.setHeader("Content-Type", "text/html");
+      res.send(resultsHTML);
     } catch (error) {
       res.status(500).json({ error: "Failed to fetch quiz results" });
     }

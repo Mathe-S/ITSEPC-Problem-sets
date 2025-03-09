@@ -1,5 +1,7 @@
 import { Quiz, QuizModel, QuizSubmission } from "../models/Quiz";
 import fs from "fs";
+import { generateQuizHTML } from "../views/templates/quizTemplate";
+import { generateQuizResultsHTML } from "../views/templates/quizResultsTemplate";
 
 export class QuizService {
   private quizModel: QuizModel;
@@ -40,24 +42,19 @@ export class QuizService {
     return await this.quizModel.save(quiz);
   }
 
-  async getActiveQuiz(): Promise<Quiz[]> {
-    // Changed return type to array
+  async getActiveQuiz(): Promise<string> {
     try {
-      // Get all files from quiz directory
       const files = await fs.promises.readdir(this.quizModel.QUIZ_DIR);
       const activeQuizzes: Quiz[] = [];
 
-      // Find all active quizzes
       for (const file of files) {
         const quiz = await this.quizModel.findById(file.replace(".json", ""));
         if (quiz && quiz.status === "active") {
-          // Remove correctAnswers when sending to students
-          const { correctAnswers, ...quizWithoutAnswer } = quiz;
-          activeQuizzes.push(quizWithoutAnswer as Quiz);
+          activeQuizzes.push(quiz);
         }
       }
 
-      return activeQuizzes; // Return array of active quizzes
+      return generateQuizHTML(activeQuizzes);
     } catch (error) {
       throw new Error("Failed to fetch active quizzes");
     }
@@ -134,7 +131,7 @@ export class QuizService {
     };
   }
 
-  async getQuizResults(quizId: string) {
+  async getQuizResults(quizId: string): Promise<string> {
     const quiz = await this.quizModel.findById(quizId);
     if (!quiz) throw new Error("Quiz not found");
 
@@ -151,31 +148,21 @@ export class QuizService {
       return acc;
     }, {} as Record<string, number>);
 
-    return {
-      quizId: quiz.id,
-      question: quiz.question,
-      status: quiz.status,
-      isMultipleChoice: quiz.isMultipleChoice,
-      correctAnswers: quiz.correctAnswers,
-      statistics: {
-        totalSubmissions,
-        averageScore: averageScore.toFixed(2) + "%",
-        answerDistribution,
-        scoreRanges: {
-          perfect: quiz.submissions.filter((s) => s.score === 100).length,
-          good: quiz.submissions.filter((s) => s.score >= 75 && s.score < 100)
-            .length,
-          fair: quiz.submissions.filter((s) => s.score >= 50 && s.score < 75)
-            .length,
-          poor: quiz.submissions.filter((s) => s.score < 50).length,
-        },
-      },
-      submissions: quiz.submissions.map((sub) => ({
-        studentId: sub.studentId,
-        answers: sub.answers,
-        score: sub.score,
-        timestamp: sub.timestamp,
-      })),
+    const scoreRanges = {
+      perfect: quiz.submissions.filter((s) => s.score === 100).length,
+      good: quiz.submissions.filter((s) => s.score >= 75 && s.score < 100)
+        .length,
+      fair: quiz.submissions.filter((s) => s.score >= 50 && s.score < 75)
+        .length,
+      poor: quiz.submissions.filter((s) => s.score < 50).length,
     };
+
+    return generateQuizResultsHTML({
+      quiz,
+      averageScore,
+      scoreRanges,
+      answerDistribution,
+      totalSubmissions,
+    });
   }
 }
