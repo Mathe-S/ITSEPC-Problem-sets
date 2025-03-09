@@ -1,5 +1,5 @@
 import { Request, Response } from "express";
-import AttendanceModel from "../models/attendance";
+import attendanceService from "../services/attendanceService";
 
 export class AttendanceController {
   static async markAttendance(req: Request, res: Response) {
@@ -12,7 +12,7 @@ export class AttendanceController {
     }
 
     try {
-      const result = await AttendanceModel.recordAttendance(
+      const result = await attendanceService.recordAttendance(
         name.toString(),
         surname.toString()
       );
@@ -36,7 +36,7 @@ export class AttendanceController {
       });
     }
     try {
-      const attendance = await AttendanceModel.getAttendanceByDate(date);
+      const attendance = await attendanceService.getAttendanceByDate(date);
       return res.json(attendance);
     } catch (error: any) {
       if (error.code === "NOT_FOUND") {

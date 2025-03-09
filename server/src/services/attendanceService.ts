@@ -3,7 +3,7 @@ import path from "path";
 import { ATTENDANCE_DIR } from "../config/constants";
 import { getCurrentDate } from "../utils/dateUtils";
 
-export class AttendanceModel {
+export class AttendanceService {
   static async recordAttendance(name: string, surname: string) {
     const today = getCurrentDate();
     const attendanceFile = path.join(ATTENDANCE_DIR, `attendance_${today}.txt`);
@@ -61,4 +61,4 @@ export class AttendanceModel {
   }
 }
 
-export default AttendanceModel;
+export default AttendanceService;
