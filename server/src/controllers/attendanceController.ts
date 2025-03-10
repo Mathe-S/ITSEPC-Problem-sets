@@ -1,7 +1,18 @@
 import { Request, Response } from "express";
 import attendanceService from "../services/attendanceService";
 
+/**
+ * Controller for handling attendance-related HTTP requests
+ */
 export class AttendanceController {
+  /**
+   * Marks attendance for a student
+   * @param req Express request containing name and surname as query parameters
+   * @param res Express response
+   * @returns JSON response with attendance record or error
+   * @throws 400 if name/surname missing or attendance already marked
+   * @throws 500 for server errors
+   */
   static async markAttendance(req: Request, res: Response) {
     const { name, surname } = req.query;
 
@@ -27,6 +38,15 @@ export class AttendanceController {
     }
   }
 
+  /**
+   * Retrieves attendance records for a specific date
+   * @param req Express request containing date as route parameter
+   * @param res Express response
+   * @returns JSON response with attendance records or error
+   * @throws 400 if date is missing
+   * @throws 404 if no records found
+   * @throws 500 for server errors
+   */
   static async viewAttendance(req: Request, res: Response) {
     const { date } = req.params;
 

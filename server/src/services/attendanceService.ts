@@ -3,7 +3,17 @@ import path from "path";
 import { ATTENDANCE_DIR } from "../config/constants";
 import { getCurrentDate } from "../utils/dateUtils";
 
+/**
+ * Service for managing attendance records
+ */
 export class AttendanceService {
+  /**
+   * Records attendance for a student
+   * @param name Student's first name
+   * @param surname Student's last name
+   * @returns Object containing attendance record details
+   * @throws ALREADY_MARKED error if attendance already recorded
+   */
   static async recordAttendance(name: string, surname: string) {
     const today = getCurrentDate();
     const attendanceFile = path.join(ATTENDANCE_DIR, `attendance_${today}.txt`);
@@ -44,6 +54,12 @@ export class AttendanceService {
     };
   }
 
+  /**
+   * Retrieves attendance records for a specific date
+   * @param date Date string in YYYY-MM-DD format
+   * @returns Object containing date and array of attendance records
+   * @throws NOT_FOUND error if no records exist for date
+   */
   static async getAttendanceByDate(date: string) {
     const attendanceFile = path.join(ATTENDANCE_DIR, `attendance_${date}.txt`);
 
