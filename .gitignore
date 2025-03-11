@@ -1,2 +1,5 @@
 attendance/
 quizzes/
+**/node_modules/
+**/coverage/
+.DS_Store
