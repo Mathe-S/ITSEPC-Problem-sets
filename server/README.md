@@ -45,6 +45,7 @@ Install Express, nodemon and TypeScript types:
 
 ```bash
 npm install express
+
 npm install --save-dev typescript nodemon ts-node @types/express @types/node
 ```
 
@@ -95,9 +96,11 @@ Edit package.json to add npm start script:
 
 start project using:
 
+
 ```bat
 npm start
 ```
+
 
 You should see:
 
