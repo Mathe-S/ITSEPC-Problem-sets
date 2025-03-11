@@ -1,4 +1,4 @@
-# Modern React App Setup Guide (2024)
+# Modern React App Setup Guide (2025)
 
 This guide provides a streamlined, up-to-date setup for a new React project using modern best practices. We'll use Vite for rapid development, TypeScript for type safety, and a few essential tools for a productive workflow.
 
