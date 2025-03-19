@@ -225,13 +225,234 @@ describe("getBucketRange()", () => {
 /*
  * Testing strategy for practice():
  *
- * TODO: Describe your testing strategy for practice() here.
+ * Partition the input space for buckets:
+ *  x empty Set
+ *  x single Set bucket
+ *  x multiple buckets
+ *
+ * Cards in the bucket:
+ *  x single cards in the bucket
+ *  x multiple cards in the bucket
+ *  x some empty some single some multiple cards
+ *
+ * Partition the input space for days:
+ *  x day = 0
+ *  x day > 0
+ *
+ *
+ *
+ *
  */
-describe("practice()", () => {
-  it("Example test case - replace with your own tests", () => {
-    assert.fail(
-      "Replace this test case with your own tests based on your testing strategy"
+describe.only("practice()", () => {
+  it("should return empty Set when given empty bucket", () => {
+    expect(practice([], 0)).to.deep.equal(new Set());
+    expect(practice([new Set()], 1)).to.deep.equal(new Set());
+    expect(practice([new Set(), new Set(), new Set()], 5)).to.deep.equal(
+      new Set()
     );
+  });
+
+  it("should return all cards in single Set bucket", () => {
+    const setOfFlashcards: Set<Flashcard> = new Set([
+      createCard("card1"),
+      createCard("card2"),
+      createCard("card3"),
+    ]);
+    const bucket: Array<Set<Flashcard>> = [new Set([...setOfFlashcards])];
+
+    expect(practice(bucket, 0)).to.deep.equal(setOfFlashcards);
+    expect(practice(bucket, 23)).to.deep.equal(setOfFlashcards);
+  });
+
+  it("should return correct cards for day 0", () => {
+    const setOfFlashcards0: Set<Flashcard> = new Set([
+      createCard("card1"),
+      createCard("card2"),
+      createCard("card3"),
+    ]);
+
+    const setOfFlashcards1: Set<Flashcard> = new Set([
+      createCard("card4"),
+      createCard("card5"),
+    ]);
+
+    const setOfFlashcards2: Set<Flashcard> = new Set([createCard("card6")]);
+
+    const bucket: Array<Set<Flashcard>> = [
+      new Set([...setOfFlashcards0]),
+      new Set([]),
+      new Set([...setOfFlashcards1]),
+      new Set(),
+      new Set([...setOfFlashcards2]),
+    ];
+
+    expect(practice(bucket, 0)).to.deep.equal(setOfFlashcards0);
+  });
+
+  it("should return correct cards for day 1", () => {
+    const setOfFlashcards0: Set<Flashcard> = new Set([
+      createCard("card1"),
+      createCard("card2"),
+      createCard("card3"),
+    ]);
+
+    const setOfFlashcards1: Set<Flashcard> = new Set([
+      createCard("card4"),
+      createCard("card5"),
+    ]);
+
+    const setOfFlashcards2: Set<Flashcard> = new Set([createCard("card6")]);
+
+    const bucket: Array<Set<Flashcard>> = [
+      new Set([...setOfFlashcards0]),
+      new Set([]),
+      new Set([...setOfFlashcards1]),
+      new Set(),
+      new Set([...setOfFlashcards2]),
+    ];
+
+    expect(practice(bucket, 1)).to.deep.equal(setOfFlashcards0);
+  });
+
+  it("should return correct cards for day 2", () => {
+    const setOfFlashcards0: Set<Flashcard> = new Set([
+      createCard("card1"),
+      createCard("card2"),
+      createCard("card3"),
+    ]);
+
+    const setOfFlashcards1: Set<Flashcard> = new Set([
+      createCard("card4"),
+      createCard("card5"),
+    ]);
+
+    const setOfFlashcards2: Set<Flashcard> = new Set([createCard("card6")]);
+
+    const bucket: Array<Set<Flashcard>> = [
+      new Set([...setOfFlashcards0]),
+      new Set([]),
+      new Set([...setOfFlashcards1]),
+      new Set(),
+      new Set([...setOfFlashcards2]),
+    ];
+
+    expect(practice(bucket, 2)).to.deep.equal(setOfFlashcards0);
+  });
+
+  it("should return correct cards for day 3", () => {
+    const setOfFlashcards0: Set<Flashcard> = new Set([
+      createCard("card1"),
+      createCard("card2"),
+      createCard("card3"),
+    ]);
+
+    const setOfFlashcards1: Set<Flashcard> = new Set([
+      createCard("card4"),
+      createCard("card5"),
+    ]);
+
+    const setOfFlashcards2: Set<Flashcard> = new Set([createCard("card6")]);
+
+    const bucket: Array<Set<Flashcard>> = [
+      new Set([...setOfFlashcards0]),
+      new Set([]),
+      new Set([...setOfFlashcards1]),
+      new Set(),
+      new Set([...setOfFlashcards2]),
+    ];
+
+    expect(practice(bucket, 3)).to.deep.equal(
+      new Set([...setOfFlashcards0, ...setOfFlashcards1])
+    );
+  });
+
+  it("should return correct cards for day 7", () => {
+    const setOfFlashcards0: Set<Flashcard> = new Set([
+      createCard("card1"),
+      createCard("card2"),
+      createCard("card3"),
+    ]);
+
+    const setOfFlashcards1: Set<Flashcard> = new Set([
+      createCard("card4"),
+      createCard("card5"),
+    ]);
+
+    const setOfFlashcards2: Set<Flashcard> = new Set([createCard("card6")]);
+
+    const bucket: Array<Set<Flashcard>> = [
+      new Set([...setOfFlashcards0]),
+      new Set([]),
+      new Set([...setOfFlashcards1]),
+      new Set(),
+      new Set([...setOfFlashcards2]),
+    ];
+
+    expect(practice(bucket, 7)).to.deep.equal(
+      new Set([...setOfFlashcards0, ...setOfFlashcards1])
+    );
+  });
+
+  it("should return correct cards for day 15", () => {
+    const setOfFlashcards0: Set<Flashcard> = new Set([
+      createCard("card1"),
+      createCard("card2"),
+      createCard("card3"),
+    ]);
+
+    const setOfFlashcards1: Set<Flashcard> = new Set([
+      createCard("card4"),
+      createCard("card5"),
+    ]);
+
+    const setOfFlashcards2: Set<Flashcard> = new Set([createCard("card6")]);
+
+    const bucket: Array<Set<Flashcard>> = [
+      new Set([...setOfFlashcards0]),
+      new Set([]),
+      new Set([...setOfFlashcards1]),
+      new Set(),
+      new Set([...setOfFlashcards2]),
+    ];
+
+    expect(practice(bucket, 15)).to.deep.equal(
+      new Set([...setOfFlashcards0, ...setOfFlashcards1, ...setOfFlashcards2])
+    );
+  });
+
+  it("should handle bucket array shorter than Leitner numbers", () => {
+    // Only 3 buckets but Leitner system has 6 values
+    const bucket: Array<Set<Flashcard>> = [
+      new Set([createCard("card1")]),
+      new Set([createCard("card2")]),
+      new Set([createCard("card3")]),
+    ];
+
+    // Test with a day that would access higher buckets if they existed
+    expect(practice(bucket, 15)).to.deep.equal(
+      new Set([...bucket[0]!, ...bucket[1]!, ...bucket[2]!])
+    );
+  });
+
+  it("should follow the Leitner schedule correctly", () => {
+    const buckets: Array<Set<Flashcard>> = Array(6)
+      .fill(null)
+      .map((_, i) => new Set([createCard(`card${i}`)]));
+
+    // Bucket 0 should be practiced every day
+    for (let day = 0; day < 10; day++) {
+      expect(practice(buckets, day).has([...buckets[0]!][0]!)).to.be.true;
+    }
+
+    // Bucket 1 should be practiced every other day
+    expect(practice(buckets, 1).has([...buckets[1]!][0]!)).to.be.true;
+    expect(practice(buckets, 2).has([...buckets[1]!][0]!)).to.be.false;
+    expect(practice(buckets, 3).has([...buckets[1]!][0]!)).to.be.true;
+
+    // Bucket 2 should be practiced every 4th day
+    expect(practice(buckets, 3).has([...buckets[2]!][0]!)).to.be.true;
+    expect(practice(buckets, 4).has([...buckets[2]!][0]!)).to.be.false;
+    expect(practice(buckets, 7).has([...buckets[2]!][0]!)).to.be.true;
   });
 });
 

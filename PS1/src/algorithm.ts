@@ -99,8 +99,21 @@ export function practice(
   buckets: Array<Set<Flashcard>>,
   day: number
 ): Set<Flashcard> {
-  // TODO: Implement this function
-  throw new Error("Implement me!");
+  if (buckets.length === 0) return new Set();
+
+  const leitnerNumbers = [2 ** 0, 2 ** 1, 2 ** 2, 2 ** 3, 2 ** 4, 2 ** 5];
+  const setOfFlashcards: Set<Flashcard> = new Set();
+
+  for (let i = 0; i < leitnerNumbers.length; i++) {
+    const leitnerNumber = leitnerNumbers[i] as number;
+    if ((day + 1) % leitnerNumber === 0 && buckets[i]) {
+      for (let flashcard of buckets[i]!) {
+        setOfFlashcards.add(flashcard);
+      }
+    }
+  }
+
+  return setOfFlashcards;
 }
 
 /**
