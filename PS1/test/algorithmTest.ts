@@ -459,7 +459,20 @@ describe.only("practice()", () => {
 /*
  * Testing strategy for update():
  *
- * TODO: Describe your testing strategy for update() here.
+ * partitions for the input space:
+ *  x bucket has single card
+ *  x bucket has multiple cards
+ *
+ *  x difficulty is 0 Wrong
+ *  x difficulty is 1 Hard
+ *  x difficulty is 2 Easy
+ *
+ *  x card in the first bucket
+ *  x card in the last bucket
+ *  x card in the middle bucket
+ *
+ *  x consecutive updates on the same card
+ *
  */
 describe("update()", () => {
   it("Example test case - replace with your own tests", () => {
