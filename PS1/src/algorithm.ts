@@ -212,8 +212,56 @@ export function getHint(card: Flashcard): string {
  * This function is designed to help users understand their learning progress and identify areas for improvement.
  * It can be extended to include additional statistics or metrics as needed.
  */
-export function computeProgress(buckets: any, history: any): any {
-  // Replace 'any' with appropriate types
-  // TODO: Implement this function (and define the spec!)
-  throw new Error("Implement me!");
+export function computeProgress(buckets: BucketMap, history: any[]): any {
+  // Validate input types
+  if (!(buckets instanceof Map)) {
+    throw new Error("Invalid buckets.");
+  }
+  if (!Array.isArray(history)) {
+    throw new Error("Invalid history.");
+  }
+
+  let totalCards = 0;
+  let correctAnswers = 0;
+  let incorrectAnswers = 0;
+  const progressByBucket: { [key: number]: number } = {};
+  // Initialize progressByBucket
+  for (const bucketNumber of buckets.keys()) {
+    progressByBucket[bucketNumber] = 0;
+  }
+
+  // Process the history to calculate statistics
+  for (const entry of history) {
+    const { card, difficulty } = entry;
+
+    // Validate history entry
+    if (
+      !(card instanceof Flashcard) ||
+      !Object.values(AnswerDifficulty).includes(difficulty)
+    ) {
+      throw new Error("Invalid history entry.");
+    }
+
+    totalCards++;
+    progressByBucket[
+      Array.from(buckets.keys()).find((key) => buckets.get(key)?.has(card)) || 0
+    ]!++;
+
+    if (difficulty === AnswerDifficulty.Easy) {
+      correctAnswers++;
+    } else if (difficulty === AnswerDifficulty.Wrong) {
+      incorrectAnswers++;
+    }
+  }
+
+  // Calculate accuracy
+  const accuracy = totalCards > 0 ? (correctAnswers / totalCards) * 100 : 0;
+
+  return {
+    totalCards,
+    correctAnswers,
+    incorrectAnswers,
+    accuracy: parseFloat(accuracy.toFixed(2)),
+    progressByBucket,
+  };
 }
