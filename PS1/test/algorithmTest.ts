@@ -459,26 +459,85 @@ describe.only("practice()", () => {
 /*
  * Testing strategy for update():
  *
- * partitions for the input space:
- *  x bucket has single card
- *  x bucket has multiple cards
- *
- *  x difficulty is 0 Wrong
- *  x difficulty is 1 Hard
- *  x difficulty is 2 Easy
- *
- *  x card in the first bucket
- *  x card in the last bucket
- *  x card in the middle bucket
- *
- *  x consecutive updates on the same card
+ * Input Space Partitioning:
+ * Bucket States:
+ *   × Card in bucket 0 (new or incorrectly answered).
+ *   × Card in bucket 1 (hard).
+ *   × Card in bucket 2 (easy).
+ *   × Card in the retired bucket (not applicable for updates).
+ * Difficulty Levels:
+ *   × Difficulty = 0 (Wrong).
+ *   × Difficulty = 1 (Hard).
+ *   × Difficulty = 2 (Easy).
+ * Card Presence:
+ *   × Card is present in the buckets.
+ *   × Card is not present in the buckets (should not change anything).
+ * Expected Outcomes:
+ *   × If the card is answered incorrectly (difficulty = 0), it should remain in bucket 0.
+ *   × If the card is answered hard (difficulty = 1), it should move down one bucket unless it is already in bucket 0.
+ *   × If the card is answered easy (difficulty = 2), it should move up one bucket unless it is in the retired bucket.
+ * Edge Cases:
+ *   × Attempting to update a card that does not exist in the buckets.
+ *   × Ensuring that the function does not allow moving a card from the retired bucket.
  *
  */
 describe("update()", () => {
-  it("Example test case - replace with your own tests", () => {
-    assert.fail(
-      "Replace this test case with your own tests based on your testing strategy"
-    );
+  it("should move card from bucket 0 to bucket 1 when answered easy", () => {
+    const buckets: BucketMap = new Map<number, Set<Flashcard>>();
+    const card = new Flashcard("front", "back", "hint", []);
+    buckets.set(0, new Set([card]));
+
+    const updatedBuckets = update(buckets, card, AnswerDifficulty.Easy);
+    expect(updatedBuckets.get(1)?.has(card)).to.be.true;
+    expect(updatedBuckets.get(0)?.has(card)).to.be.false;
+  });
+
+  it("should move card from bucket 1 to bucket 2 when answered easy", () => {
+    const buckets: BucketMap = new Map<number, Set<Flashcard>>();
+    const card = new Flashcard("front", "back", "hint", []);
+    buckets.set(1, new Set([card]));
+
+    const updatedBuckets = update(buckets, card, AnswerDifficulty.Easy);
+    expect(updatedBuckets.get(2)?.has(card)).to.be.true;
+    expect(updatedBuckets.get(1)?.has(card)).to.be.false;
+  });
+
+  it("should move card from bucket 1 to bucket 0 when answered hard", () => {
+    const buckets: BucketMap = new Map<number, Set<Flashcard>>();
+    const card = new Flashcard("front", "back", "hint", []);
+    buckets.set(1, new Set([card]));
+
+    const updatedBuckets = update(buckets, card, AnswerDifficulty.Hard);
+    expect(updatedBuckets.get(0)?.has(card)).to.be.true;
+    expect(updatedBuckets.get(1)?.has(card)).to.be.false;
+  });
+
+  it("should keep card in bucket 0 when answered wrong", () => {
+    const buckets: BucketMap = new Map<number, Set<Flashcard>>();
+    const card = new Flashcard("front", "back", "hint", []);
+    buckets.set(0, new Set([card]));
+
+    const updatedBuckets = update(buckets, card, AnswerDifficulty.Wrong);
+    expect(updatedBuckets.get(0)?.has(card)).to.be.true;
+  });
+
+  it("should not move card from retired bucket", () => {
+    const buckets: BucketMap = new Map<number, Set<Flashcard>>();
+    const card = new Flashcard("front", "back", "hint", []);
+    buckets.set(5, new Set([card])); // Retired bucket
+
+    const updatedBuckets = update(buckets, card, AnswerDifficulty.Easy);
+    expect(updatedBuckets.get(5)?.has(card)).to.be.true; // Should remain in retired bucket
+  });
+
+  it("should not change buckets if card is not present", () => {
+    const buckets: BucketMap = new Map<number, Set<Flashcard>>();
+    const card1 = new Flashcard("front1", "back1", "hint1", []);
+    const card2 = new Flashcard("front2", "back2", "hint2", []);
+    buckets.set(0, new Set([card1]));
+
+    const updatedBuckets = update(buckets, card2, AnswerDifficulty.Easy);
+    expect(updatedBuckets.get(0)?.has(card1)).to.be.true; // card1 should still be there
   });
 });
 
