@@ -565,6 +565,17 @@ describe("getHint()", () => {
     expect(hint).to.equal("Think of the Eiffel Tower.");
   });
 
+  it("should return a message if the hint is empty", () => {
+    const card = new Flashcard(
+      "What is the capital of Spain?",
+      "Madrid",
+      "",
+      []
+    );
+    const hint = getHint(card);
+    expect(hint).to.equal("No hint available.");
+  });
+
   it("should handle flashcards with no tags", () => {
     const card = new Flashcard(
       "What is the largest ocean?",
@@ -575,8 +586,19 @@ describe("getHint()", () => {
     const hint = getHint(card);
     expect(hint).to.equal("It's named after a peaceful nature.");
   });
-});
 
+  it("should throw an error for invalid input (null)", () => {
+    expect(() => getHint(null as any)).to.throw(Error, "Invalid flashcard.");
+  });
+
+  it("should throw an error for invalid input (non-flashcard object)", () => {
+    expect(() => getHint({} as any)).to.throw(Error, "Invalid flashcard.");
+    expect(() => getHint("not a flashcard" as any)).to.throw(
+      Error,
+      "Invalid flashcard."
+    );
+  });
+});
 /*
  * Testing strategy for computeProgress():
  *
