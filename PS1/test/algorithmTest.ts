@@ -602,12 +602,122 @@ describe("getHint()", () => {
 /*
  * Testing strategy for computeProgress():
  *
- * TODO: Describe your testing strategy for computeProgress() here.
+ * Input Space Partitioning:
+ *
+ * Valid Inputs:
+ *   × Buckets with flashcards in various states (some practiced, some not).
+ *   × History with a mix of correct and incorrect answers.
+ *
+ * Edge Cases:
+ *   × Empty buckets and empty history.
+ *   × All answers correct or all answers incorrect.
+ *
+ * Invalid Inputs:
+ *   × Invalid bucket structures (e.g., non-sets).
+ *   × Invalid history entries (e.g., missing fields).
+ *
+ * Expected Outcomes:
+ *   × The function should return an object with the correct statistics based on the provided buckets and history.
+ *   × If the input is invalid, the function should throw an error with a descriptive message.
  */
 describe("computeProgress()", () => {
-  it("Example test case - replace with your own tests", () => {
-    assert.fail(
-      "Replace this test case with your own tests based on your testing strategy"
+  it("should return correct statistics for valid inputs", () => {
+    const buckets: BucketMap = new Map<number, Set<Flashcard>>();
+    const card1 = new Flashcard("Q1", "A1", "Hint1", []);
+    const card2 = new Flashcard("Q2", "A2", "Hint2", []);
+    const card3 = new Flashcard("Q3", "A3", "Hint3", []);
+
+    buckets.set(0, new Set([card1, card2])); // Bucket 0
+    buckets.set(1, new Set([card3])); // Bucket 1
+
+    const history = [
+      { card: card1, difficulty: AnswerDifficulty.Easy, date: new Date() },
+      { card: card2, difficulty: AnswerDifficulty.Wrong, date: new Date() },
+      { card: card3, difficulty: AnswerDifficulty.Hard, date: new Date() },
+    ];
+
+    const result = computeProgress(buckets, history);
+    expect(result.totalCards).to.equal(3);
+    expect(result.correctAnswers).to.equal(1);
+    expect(result.incorrectAnswers).to.equal(1);
+    expect(result.accuracy).to.equal(33.33); // 1 correct out of 3
+    expect(result.progressByBucket).to.deep.equal({ 0: 2, 1: 1 });
+  });
+
+  it("should handle empty buckets and history", () => {
+    const buckets: BucketMap = new Map<number, Set<Flashcard>>();
+    const history: any[] = []; // Empty history
+
+    const result = computeProgress(buckets, history);
+    expect(result.totalCards).to.equal(0);
+    expect(result.correctAnswers).to.equal(0);
+    expect(result.incorrectAnswers).to.equal(0);
+    expect(result.accuracy).to.equal(0);
+    expect(result.progressByBucket).to.deep.equal({});
+  });
+
+  it("should handle all correct answers", () => {
+    const buckets: BucketMap = new Map<number, Set<Flashcard>>();
+    const card1 = new Flashcard("Q1", "A1", "Hint1", []);
+    const card2 = new Flashcard("Q2", "A2", "Hint2", []);
+
+    buckets.set(0, new Set([card1, card2])); // Bucket 0
+
+    const history = [
+      { card: card1, difficulty: AnswerDifficulty.Easy, date: new Date() },
+      { card: card2, difficulty: AnswerDifficulty.Easy, date: new Date() },
+    ];
+
+    const result = computeProgress(buckets, history);
+    expect(result.totalCards).to.equal(2);
+    expect(result.correctAnswers).to.equal(2);
+    expect(result.incorrectAnswers).to.equal(0);
+    expect(result.accuracy).to.equal(100);
+    expect(result.progressByBucket).to.deep.equal({ 0: 2 });
+  });
+
+  it("should handle all incorrect answers", () => {
+    const buckets: BucketMap = new Map<number, Set<Flashcard>>();
+    const card1 = new Flashcard("Q1", "A1", "Hint1", []);
+    const card2 = new Flashcard("Q2", "A2", "Hint2", []);
+
+    buckets.set(0, new Set([card1, card2])); // Bucket 0
+
+    const history = [
+      { card: card1, difficulty: AnswerDifficulty.Wrong, date: new Date() },
+      { card: card2, difficulty: AnswerDifficulty.Wrong, date: new Date() },
+    ];
+
+    const result = computeProgress(buckets, history);
+    expect(result.totalCards).to.equal(2);
+    expect(result.correctAnswers).to.equal(0);
+    expect(result.incorrectAnswers).to.equal(2);
+    expect(result.accuracy).to.equal(0);
+    expect(result.progressByBucket).to.deep.equal({ 0: 2 });
+  });
+
+  it("should throw an error for invalid buckets", () => {
+    const buckets: any = {}; // Invalid buckets structure
+    const history: any[] = [];
+
+    expect(() => computeProgress(buckets, history)).to.throw(
+      Error,
+      "Invalid buckets."
+    );
+  });
+
+  it("should throw an error for invalid history entries", () => {
+    const buckets: BucketMap = new Map<number, Set<Flashcard>>();
+    const card1 = new Flashcard("Q1", "A1", "Hint1", []);
+    buckets.set(0, new Set([card1])); // Bucket 0
+
+    const history = [
+      { card: card1, difficulty: "InvalidDifficulty", date: new Date() }, // Invalid difficulty
+    ];
+
+    expect(() => computeProgress(buckets, history)).to.throw(
+      Error,
+      "Invalid history entry."
     );
   });
 });
