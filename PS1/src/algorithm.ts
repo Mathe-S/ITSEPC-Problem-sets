@@ -164,9 +164,17 @@ export function update(
 /**
  * Generates a hint for a flashcard.
  *
- * @param card flashcard to hint
- * @returns a hint for the front of the flashcard.
- * @spec.requires card is a valid Flashcard.
+ * @param card - The flashcard for which to generate a hint.
+ * @returns A hint for the front of the flashcard, or a helpful message if no hint is available.
+ *
+ * @spec.requires card is a valid Flashcard instance.
+ * @spec.ensures If the card has a non-empty hint, return the hint.
+ * @spec.ensures If the card's hint is empty, return a message indicating that the hint is not available.
+ * @spec.ensures If the card is not a valid Flashcard, throw an error with a descriptive message.
+ *
+ * This function is designed to assist users in recalling information related to the flashcard.
+ * It can be extended to other learning domains, such as providing hints for math problems,
+ * historical facts, or scientific concepts, by adapting the hint generation logic.
  */
 export function getHint(card: Flashcard): string {
   return card.hint;
