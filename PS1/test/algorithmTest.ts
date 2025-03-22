@@ -243,7 +243,7 @@ describe("getBucketRange()", () => {
  *
  *
  */
-describe.only("practice()", () => {
+describe("practice()", () => {
   it("should return empty Set when given empty bucket", () => {
     expect(practice([], 0)).to.deep.equal(new Set());
     expect(practice([new Set()], 1)).to.deep.equal(new Set());

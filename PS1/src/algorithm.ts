@@ -144,14 +144,25 @@ export function update(
       } else if (difficulty === AnswerDifficulty.Hard) {
         // Move down one bucket if not in bucket 0
         if (bucketNumber > 0) {
+          if (!updatedBuckets.has(bucketNumber - 1)) {
+            updatedBuckets.set(bucketNumber - 1, new Set<Flashcard>());
+          }
           updatedBuckets.get(bucketNumber - 1)?.add(card);
         } else {
+          if (!updatedBuckets.has(0)) {
+            updatedBuckets.set(0, new Set<Flashcard>());
+          }
           updatedBuckets.get(0)?.add(card); // Stay in bucket 0
         }
       } else if (difficulty === AnswerDifficulty.Easy) {
         // Move up one bucket if not in the retired bucket
         if (bucketNumber < 5) {
+          if (!updatedBuckets.has(bucketNumber + 1)) {
+            updatedBuckets.set(bucketNumber + 1, new Set<Flashcard>());
+          }
           updatedBuckets.get(bucketNumber + 1)?.add(card);
+        } else {
+          updatedBuckets.get(5)?.add(card);
         }
       }
       break; // Exit the loop once the card is found and updated
