@@ -130,8 +130,35 @@ export function update(
   card: Flashcard,
   difficulty: AnswerDifficulty
 ): BucketMap {
-  // TODO: Implement this function
-  throw new Error("Implement me!");
+  const updatedBuckets = new Map(buckets); // Create a copy of the buckets to avoid mutating the original
+
+  // Find the current bucket of the card
+  for (const [bucketNumber, flashcards] of updatedBuckets) {
+    if (flashcards.has(card)) {
+      flashcards.delete(card); // Remove the card from the current bucket
+
+      // Determine the new bucket based on difficulty
+      if (difficulty === AnswerDifficulty.Wrong) {
+        // Stay in bucket 0
+        updatedBuckets.get(0)?.add(card);
+      } else if (difficulty === AnswerDifficulty.Hard) {
+        // Move down one bucket if not in bucket 0
+        if (bucketNumber > 0) {
+          updatedBuckets.get(bucketNumber - 1)?.add(card);
+        } else {
+          updatedBuckets.get(0)?.add(card); // Stay in bucket 0
+        }
+      } else if (difficulty === AnswerDifficulty.Easy) {
+        // Move up one bucket if not in the retired bucket
+        if (bucketNumber < 5) {
+          updatedBuckets.get(bucketNumber + 1)?.add(card);
+        }
+      }
+      break; // Exit the loop once the card is found and updated
+    }
+  }
+
+  return updatedBuckets;
 }
 
 /**
