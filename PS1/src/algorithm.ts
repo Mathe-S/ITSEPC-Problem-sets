@@ -177,7 +177,13 @@ export function update(
  * historical facts, or scientific concepts, by adapting the hint generation logic.
  */
 export function getHint(card: Flashcard): string {
-  return card.hint;
+  // Check if the input is a valid Flashcard
+  if (!(card instanceof Flashcard)) {
+    throw new Error("Invalid flashcard.");
+  }
+
+  // Return the hint or a default message if the hint is empty
+  return card.hint.length > 0 ? card.hint : "No hint available.";
 }
 
 /**
