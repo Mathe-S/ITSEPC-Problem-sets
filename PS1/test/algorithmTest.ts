@@ -544,13 +544,36 @@ describe("update()", () => {
 /*
  * Testing strategy for getHint():
  *
- * TODO: Describe your testing strategy for getHint() here.
+ * Input Space Partitioning:
+ * Valid Flashcards:
+ *   × Flashcards with different types of content on the front and back.
+ *   × Flashcards with hints that are empty or non-empty.
+ * Invalid Flashcards:
+ *   × Non-flashcard objects (to test how the function handles unexpected input).
+ * Expected Outcomes:
+ *   × The function should return a hint based on the content of the flashcard.
  */
 describe("getHint()", () => {
-  it("Example test case - replace with your own tests", () => {
-    assert.fail(
-      "Replace this test case with your own tests based on your testing strategy"
+  it("should return the hint for a valid flashcard", () => {
+    const card = new Flashcard(
+      "What is the capital of France?",
+      "Paris",
+      "Think of the Eiffel Tower.",
+      []
     );
+    const hint = getHint(card);
+    expect(hint).to.equal("Think of the Eiffel Tower.");
+  });
+
+  it("should handle flashcards with no tags", () => {
+    const card = new Flashcard(
+      "What is the largest ocean?",
+      "Pacific Ocean",
+      "It's named after a peaceful nature.",
+      []
+    );
+    const hint = getHint(card);
+    expect(hint).to.equal("It's named after a peaceful nature.");
   });
 });
 
