@@ -187,12 +187,30 @@ export function getHint(card: Flashcard): string {
 }
 
 /**
- * Computes statistics about the user's learning progress.
+ * Computes statistics about the user's learning progress based on flashcard buckets and answer history.
  *
- * @param buckets representation of learning buckets.
- * @param history representation of user's answer history.
- * @returns statistics about learning progress.
- * @spec.requires [SPEC TO BE DEFINED]
+ * @param buckets - A representation of the current state of flashcard buckets, where each bucket contains a set of Flashcards.
+ * @param history - A representation of the user's answer history, which includes information about each flashcard practiced,
+ *                  the difficulty level of the answer, and the date of practice.
+ *
+ * @returns An object containing various statistics about the user's learning progress, including:
+ *          - totalCards: Total number of flashcards practiced.
+ *          - correctAnswers: Total number of correct answers.
+ *          - incorrectAnswers: Total number of incorrect answers.
+ *          - accuracy: The percentage of correct answers out of total answers (0-100%).
+ *          - progressByBucket: An object mapping each bucket number to the number of cards practiced from that bucket.
+ *
+ * @spec.requires buckets is a valid representation of flashcard buckets.
+ * @spec.requires history is a valid representation of the user's answer history, where each entry includes:
+ *          - card: The Flashcard that was practiced.
+ *          - difficulty: The AnswerDifficulty indicating how well the user performed (Wrong, Hard, Easy).
+ *          - date: The date when the flashcard was practiced.
+ *
+ * @spec.ensures If the input is valid, the function returns an object with the specified statistics.
+ * @spec.ensures If the input is invalid, the function throws an error with a descriptive message.
+ *
+ * This function is designed to help users understand their learning progress and identify areas for improvement.
+ * It can be extended to include additional statistics or metrics as needed.
  */
 export function computeProgress(buckets: any, history: any): any {
   // Replace 'any' with appropriate types
