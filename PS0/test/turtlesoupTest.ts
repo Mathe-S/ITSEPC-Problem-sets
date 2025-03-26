@@ -1,3 +1,6 @@
+
+
+
 import { expect } from "chai";
 import {
   chordLength,
@@ -79,8 +82,7 @@ describe("findPath", () => {
     ];
     const pathInstructions = findPath(turtle, points);
     // Since findPath is conceptual in PS0, you might just check if it returns *something*
-    expect(pathInstructions).to.be.an("array");
-    // More detailed tests would involve analyzing the *content* of pathInstructions if you define a specific output format.
+    expect(pathInstructions).to.deep.equal(["turn 270", "forward 30", "turn 0", "forward 30"])
   });
 });
 
